@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  # O Coração da nossa Mensageria
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: tce-rabbitmq
+    ports:
+      - "5672:5672"   # Porta de comunicação do Java
+      - "15672:15672" # Painel Visual do RabbitMQ (User: guest / Pass: guest)
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+
+  # Nosso Banco de Dados Relacional + Vetorial
+  postgres-vector:
+    image: ankane/pgvector:latest # Imagem oficial do Postgres com PGVector
+    container_name: tce-postgres
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: licitacao_db
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  rabbitmq_data:
+  postgres_data:
